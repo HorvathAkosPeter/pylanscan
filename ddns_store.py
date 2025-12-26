@@ -1,11 +1,13 @@
-from lib import ip2rev
+import subprocess
+
+from lib import ip2rev, dict_update
 
 class ddns_store():
-  def __init__(conf):
+  def __init__(self, conf):
     self._conf = conf
     self._nsu = dict()
 
-  def get_record(rec_name, rec_type):
+  def get_record(self, rec_name, rec_type):
     result = subprocess.run(["host", "-v", "-T", "-4", "-p", str(self._conf["srv_port"]), "-t",
                                 rec_type, rec_name, self._conf["srv_host"]],
                             stdout=subprocess.PIPE)
@@ -19,7 +21,7 @@ class ddns_store():
         return i[4]
     return False
 
-  def add_record(zone, rec_name, rec_type, rec_value):
+  def add_record(self, zone, rec_name, rec_type, rec_value):
     # print ("add_record(%s, %s, %s, %s)" % (zone, rec_name, rec_type, rec_value))
     cur_val = self.get_record(rec_name, rec_type)
     if cur_val == rec_value:
@@ -32,8 +34,9 @@ class ddns_store():
     if rec_type != "TXT":
       self.add_record(zone, rec_name, "TXT", ts)
 
-  def store(output):
+  def store(self, output):
     hosts_found = set()
+    output = map(lambda w: dict_update(w, {"dyn_fqdn": ".".join([w["hostname"], self._conf["fwd_zone"]]) }), output)
     for entry in output:
       dyn_fqdn = entry["dyn_fqdn"]
       iface_dyn_fqdn = ".".join([entry["iface"], entry["dyn_fqdn"]])
@@ -42,7 +45,7 @@ class ddns_store():
       self.add_record(self._conf["fwd_zone"], iface_dyn_fqdn, "A", ip)
       self.add_record(self._conf["rev_zone"], revip_str, "PTR", iface_dyn_fqdn + ".")
       if dyn_fqdn not in hosts_found:
-        add_record(ddns_fwd_zone, dyn_fqdn, "A", ip)
+        self.add_record(self._conf["fwd_zone"], dyn_fqdn, "A", ip)
         hosts_found.add(dyn_fqdn)
 
     print (self._nsu)

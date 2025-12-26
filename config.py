@@ -1,34 +1,38 @@
+import avahi_scanner
+import mac_scanner
+import ddns_store
+
 avahi_scanner = {
-  scanner_type: avahi_scanner
-  avahi_browse_flags: "-arkpt",
+  "scanner_type": avahi_scanner,
+  "avahi_browse_flags": "-arkpt"
 }
 
 mac_scanner = {
-  scanner_type: mac_scanner
-  macs: {
-    "0a:d9:da:78:e9:3d": "derpeter"
-    "a6:c0:37:bf:d4:3e": "derpeter"
-    "80:c1:6e:44:ca:32": "hpmaxx"
-    "7c:e9:d3:82:3c:53": "hpmaxx"
-    "14:5f:94:de:84:5c": "diekati"
-    "f0:c4:2f:08:61:a8": "matepad1"
-    "b0:5a:da:23:5b:40": "hp235b3f"
-    "ce:0f:3a:da:f6:e4": "sony"
-    "46:b3:02:66:fe:01": "tcl"
-    "f8:5e:a0:06:fc:02": "katilaptop2"
+  "scanner_type": mac_scanner,
+  "macs": {
+    "0a:d9:da:78:e9:3d": "derpeter",
+    "a6:c0:37:bf:d4:3e": "derpeter",
+    "80:c1:6e:44:ca:32": "hpmaxx",
+    "7c:e9:d3:82:3c:53": "hpmaxx",
+    "14:5f:94:de:84:5c": "diekati",
+    "f0:c4:2f:08:61:a8": "matepad1",
+    "b0:5a:da:23:5b:40": "hp235b3f",
+    "ce:0f:3a:da:f6:e4": "sony",
+    "46:b3:02:66:fe:01": "tcl",
+    "f8:5e:a0:06:fc:02": "katilaptop2",
     "1e:6c:d1:37:18:49": "e7_1"
   }
 }
 
 ddns_store = {
-  store_type: ddns_store
-  srv_host: "127.0.0.1"
-  srv_port: 9053
-  key_path: "/etc/bind/ddns.key.conf"
-  fwd_zone: "dyn.hwen.de"
-  rev_zone: "168.192.in-addr.arpa"
-  rev_mask: "192.168.0.0/16"
-  default_refresh: 3600
+  "store_type": ddns_store,
+  "srv_host": "127.0.0.1",
+  "srv_port": 9053,
+  "key_path": "/etc/bind/ddns.key.conf",
+  "fwd_zone": "dyn.hwen.de",
+  "rev_zone": "168.192.in-addr.arpa",
+  "rev_mask": "192.168.0.0/16",
+  "default_refresh": 3600
 }
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]

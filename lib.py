@@ -1,3 +1,5 @@
+import datetime
+
 def die(msg, exit_code=-1):
   print (msg, file=sys.stderr)
   sys.exit(exit_code)
