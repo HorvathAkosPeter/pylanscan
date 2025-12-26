@@ -21,7 +21,7 @@ class uniq_functor(object):
       return not iseq
 
 def entry_compare(e1, e2):
-  return e1.__repr__() == e2.__repr__()
+  return e1["iface"] == e2["iface"] and e1["ip"] == e2["ip"] and e1["hostname"] == e2["hostname"]
 
 def ts_now():
   now = datetime.datetime.now(tz=datetime.timezone.utc)
