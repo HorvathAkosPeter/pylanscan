@@ -1,21 +1,18 @@
 #!/usr/bin/python3
-from lib import *
+import importlib
 
 import config
-
-import importlib
 
 #import avahi_scanner
 #import mac_scanner
 #import ddns_store
 
-import datetime
-import ipaddress
-import re
-import subprocess
-import sys
+#import datetime
+#import ipaddress
+#import re
+#import subprocess
+#import sys
 
-nsu = dict()
 ts = ts_now()
 output = []
 
@@ -31,8 +28,6 @@ output = filter(uniq_functor(entry_compare), output)
 
 [print (i) for i in output]
 sys.exit(0)
-
-hosts_found = set()
 
 for i in config.stores:
   store_lib = importlib(i["store_type"])

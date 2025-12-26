@@ -1,6 +1,7 @@
 class mac_scanner:
   def __init__(conf):
-    self._conf = _conf
+    self._conf = conf
+
   def scan():
     output = subprocess.run(["ip", "neigh", "ls"], stdout=subprocess.PIPE)
     if output.returncode != 0:
@@ -16,4 +17,3 @@ class mac_scanner:
 
 def create(conf):
   return mac_scanner(conf)
-
