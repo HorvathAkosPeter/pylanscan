@@ -1,10 +1,12 @@
+import os
+
 import avahi_scanner
 import mac_scanner
 import ddns_store
 
 avahi_scanner = {
   "scanner_type": avahi_scanner,
-  "avahi_browse_flags": "-arkpt"
+  "avahi_browse_flags": "-arpt" if "TERMUX_VERSION" in os.environ else "-arkpt"
 }
 
 mac_scanner = {
@@ -28,7 +30,7 @@ ddns_store = {
   "store_type": ddns_store,
   "srv_host": "127.0.0.1",
   "srv_port": 9053,
-  "key_path": "/etc/bind/ddns.key.conf",
+  "key_path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/bind/ddns.key.conf",
   "fwd_zone": "dyn.hwen.de",
   "rev_zone": "168.192.in-addr.arpa",
   "rev_mask": "192.168.0.0/16",

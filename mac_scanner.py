@@ -1,23 +1,26 @@
+import re
 import subprocess
 
-from lib import dict_update
+from lib import dict_update, valid_ipv4
 
 class mac_scanner:
-  def __init__(self, conf):
+  def __init__(self, conf, pylanscan):
     self._conf = conf
+    self._pylanscan = pylanscan
 
   def scan(self):
-    output = subprocess.run(["ip", "neigh", "ls"], stdout=subprocess.PIPE)
-    if output.returncode != 0:
-      die ("ip neigh ls command fails, exit code: %i" % output.returncode, exit_code = output.returncode)
-    output = output.stdout.decode("utf-8")
-    output = output.split("\n")
-    output = map(lambda w: w.split(), output)
-    output = filter(lambda w: len(w)>=5, output)
-    output = map(lambda w:{"iface": w[2], "mac": w[4], "ip": w[0]}, output)
-    output = filter(lambda w: w["mac"] in self._conf["macs"], output)
-    output = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), output)
-    return output
+    scan_result = subprocess.run(["ip", "neigh", "ls"], stdout=subprocess.PIPE)
+    if scan_result.returncode != 0:
+      die ("ip neigh ls command fails, exit code: %i" % scan_result.returncode, exit_code = scan_result.returncode)
+    scan_result = scan_result.stdout.decode("utf-8")
+    scan_result = scan_result.split("\n")
+    scan_result = map(lambda w: w.split(), scan_result)
+    scan_result = filter(lambda w: len(w)>=5, scan_result)
+    scan_result = map(lambda w:{"iface": w[2], "mac": w[4], "ip": w[0]}, scan_result)
+    scan_result = filter(lambda w: valid_ipv4(w["ip"]), scan_result)
+    scan_result = filter(lambda w: w["mac"] in self._conf["macs"], scan_result)
+    scan_result = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), scan_result)
+    return scan_result
 
-def create(conf):
-  return mac_scanner(conf)
+def create(conf, pylanscan):
+  return mac_scanner(conf, pylanscan)

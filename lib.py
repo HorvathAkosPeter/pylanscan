@@ -1,4 +1,6 @@
 import datetime
+import re
+import sys
 
 def die(msg, exit_code=-1):
   print (msg, file=sys.stderr)
@@ -28,6 +30,9 @@ def entry_compare(e1, e2):
 def ts_now():
   now = datetime.datetime.now(tz=datetime.timezone.utc)
   return now.strftime("%Y%m%d%H%M%S%f")
+
+def valid_ipv4(str_ip):
+  return re.match("^(\\d+\\.){3}\\d+$", str_ip)
 
 def ip2rev(ip):
   return ".".join(ip.split(".")[::-1])+".in-addr.arpa"
