@@ -47,7 +47,10 @@ class ddns_store():
     scan_result = map(lambda w: dict_update(w, {"dyn_fqdn": ".".join([w["hostname"], self._conf["fwd_zone"]]) }), scan_result)
     for entry in scan_result:
       dyn_fqdn = entry["dyn_fqdn"]
-      iface_dyn_fqdn = ".".join([entry["iface"], entry["dyn_fqdn"]])
+      if entry["hostname"] == self._pylanscan._hostname:
+        iface_dyn_fqdn = ".".join([entry["iface"], self._pylanscan._hostname, self._conf["fwd_zone"]])
+      else:
+        iface_dyn_fqdn = ".".join([entry["hostname"], entry["iface"], self._pylanscan._hostname, self._conf["fwd_zone"]])
       ip = entry["ip"]
       revip_str = ip2rev(ip)
       self.add_record(self._conf["fwd_zone"], iface_dyn_fqdn, "A", ip)
@@ -55,6 +58,8 @@ class ddns_store():
         self.add_record(self._conf["fwd_zone"], dyn_fqdn, "A", ip)
         self.add_record(self._conf["rev_zone"], revip_str, "PTR", dyn_fqdn + ".")
         hosts_found.add(dyn_fqdn)
+      else:
+        self.add_record(self._conf["rev_zone"], revip_str, "PTR", iface_dyn_fqdn + ".")
 
     # print (self._nsu)
     for zone in self._nsu:

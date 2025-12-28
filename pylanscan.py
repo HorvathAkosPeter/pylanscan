@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+import os
 import sys
 
-from lib import ts_now, dict_update, uniq_functor, entry_compare
+from lib import ts_now, dict_update, uniq_functor, entry_compare, die
 
 import config
 
@@ -9,6 +10,12 @@ class pylanscan():
   def __init__(self, config):
     self._ts = ts_now()
     self.scan_result = []
+    if hasattr(config, "hostname"):
+      self._hostname = config.hostname
+    elif "HOSTNAME" in os.environ and os.environ["HOSTNAME"]:
+      self._hostname = os.environ["HOSTNAME"]
+    else:
+      die ("HOSTNAME unknown, need either hostname in configuration or HOSTNAME environment variable")
 
   def scan(self):
     for scanner_conf in config.scanners:
@@ -19,6 +26,8 @@ class pylanscan():
       self.scan_result += scan_result
 
   def process(self):
+    #[print (i) for i in self.scan_result]
+    #sys.exit(0)
     self.scan_result = filter(lambda w: w["iface"] in config.iface_prio_order, self.scan_result)
     self.scan_result = map(lambda w: dict_update(w, {"iface_prio": config.iface_prio_order.index(w["iface"])}), self.scan_result)
     self.scan_result = sorted(self.scan_result, key = lambda w: ",".join([str(w["iface_prio"]), w["ip"], w["hostname"]]) )
