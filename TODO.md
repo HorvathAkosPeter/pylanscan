@@ -6,3 +6,8 @@
 * yaml-based configuration
 * utilize nmap ping or tcp scan
 * ssh-keygen has a subnet scanning feature and seems working quite well
+* using some type of DNSSEC in the ddns store
+* axfr scan as source
+* /etc/hosts as store
+* environment variables as store
+* more complex structure: a local termux ddns on the phone/router, as first-level store, then merge it into a hosted net bind

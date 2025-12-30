@@ -6,6 +6,8 @@ from lib import dict_update, valid_ipv4
 class sshkey_scanner:
   def __init__(self, conf, pylanscan):
     self._conf = conf
+    if "timeout" not in conf:
+      self._conf["timeout"] = 5
     self._pylanscan = pylanscan
     self._read_hostkeys(conf.ssh_host_keys)
 
@@ -14,25 +16,49 @@ class sshkey_scanner:
     keys = keyfile.read().split("\\n")
     keys = map(lambda w: w.strip().split(), keys)
     keys = filter(lambda w: len(w) == 3, keys)
-    keys = map(lambda w: {"hostname": w[0], "type": w[1], key: w[2]})
+    keys = map(lambda w: {"hostname": w[0], "type": w[1], "key": w[2]})
     self._hostkeys = keys
 
-  def scan(self):
-    for port in self._conf.ports:
+  # makes hosts like [1.2.3.4]:5 to 1.2.3.4. Other formats remain unchanged
+  def _xtrhost(self, hoststr):
+    if re.match("^\[.+\]:\\d+$", hoststr):
+      return re.split(r'\[|\]', hoststr)[1]
+    else:
+      return hoststr
 
-    scan_result = subprocess.run(["ip", "neigh", "ls"], stdout=subprocess.PIPE)
-    if scan_result.returncode != 0:
-      die ("ip neigh ls command fails, exit code: %i" % scan_result.returncode, exit_code = scan_result.returncode)
-    scan_result = scan_result.stdout.decode("utf-8")
-    scan_result = scan_result.split("\n")
-    scan_result = map(lambda w: w.split(), scan_result)
-    scan_result = filter(lambda w: len(w)>=5, scan_result)
-    scan_result = map(lambda w:{"iface": w[2], "mac": w[4], "ip": w[0]}, scan_result)
-    scan_result = filter(lambda w: valid_ipv4(w["ip"]), scan_result)
-    unknown_macs = filter(lambda w: w["mac"] not in self._conf["macs"], scan_result)
-    self._pylanscan.add_unknown_macs(unknown_macs)
-    scan_result = filter(lambda w: w["mac"] in self._conf["macs"], scan_result)
-    scan_result = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), scan_result)
+  def scan(self):
+    if not self._unknown_macs:
+      return []
+
+    scan_result = []
+    keyscan_results = []
+    for port in self._conf.ports:
+      cmd = ["ssh-keyscan", "-4", "-T", str(self._conf["timeout"]), "-p", str(port)]
+      cmd += map(w: w["ip"], self._unknown_macs)
+      keyscan_result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      if keyscan_result.returncode not in [0, 1]:
+        die ("ssh-keyscan command fails, exit code: %i" % scan_result.returncode, exit_code = scan_result.returncode)
+      keyscan_result = keyscan_result.stdout.decode("utf-8")
+      keyscan_result = keyscan_result.split("\n")
+      keyscan_result = filter(lambda w: w[0] != "#", keyscan_result)
+      keyscan_result = map(lambda w: w.split(), keyscan_result)
+      keyscan_result = map(lambda w: {"ip": self._xtrhost(w[0]), "type": w[1], "key": w[2]}, keyscan_result)
+      keyscan_results += keyscan_result
+
+    for found_key in keyscan_results:
+      found_hostkey = filter(lambda w: w["type"] == found_key["type"] and w["key"] == found_key["key"], self._hostkeys)
+      found_hostkey = list(found_hostkey)
+      if not found_hostkey:
+        continue
+      else:
+        found_hostkey = found_hostkey[0]
+      # we have found a key in the hostkey table. Now we find its interface in the unknown_macs table
+      unknown_macs_entry = filter(lambda w: found_key["ip"] == w["ip"], self._pylonscan._unknown_macs)
+      unknown_macs_entry = list(unknown_macs_entry)
+      if not unknown_macs_entry:
+        die("should not happen")
+      unknown_macs_entry = unknown_macs_entry[0]
+      scan_result += {"ip": found_key["ip"], "iface": unknown_macs_entry["iface"], "hostname": found_hostkey["hostname"], "sshkey_type": found_hostkey["type"], "sshkey": found_hostkey["key"]}
     return scan_result
 
 def create(conf, pylanscan):
