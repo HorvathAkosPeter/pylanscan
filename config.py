@@ -52,7 +52,7 @@ ddns_stor = {
 }
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
-# scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
-scanners = [ mac_scan, sshkey_scan ]
+scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
+# scanners = [ mac_scan, sshkey_scan ]
 stores = [ ddns_stor ]
 # hostname =  "well"
