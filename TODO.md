@@ -11,3 +11,4 @@
 * /etc/hosts as store
 * environment variables as store
 * more complex structure: a local termux ddns on the phone/router, as first-level store, then merge it into a hosted net bind
+* bind9 does not want to give AXFR queries for ANY record type. (Fun: -t AXFR but without "-l" works)

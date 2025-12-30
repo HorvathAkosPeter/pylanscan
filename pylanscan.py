@@ -8,6 +8,7 @@ import config
 
 class pylanscan():
   def __init__(self, config):
+    self._config = config
     self._ts = ts_now()
     self._unknown_macs = []
     self.scan_result = []

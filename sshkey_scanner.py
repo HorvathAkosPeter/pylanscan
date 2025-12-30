@@ -9,38 +9,38 @@ class sshkey_scanner:
     if "timeout" not in conf:
       self._conf["timeout"] = 5
     self._pylanscan = pylanscan
-    self._read_hostkeys(conf.ssh_host_keys)
+    self._read_hostkeys(conf["ssh_known_hosts"])
 
   def _read_hostkeys(self, path):
     keyfile = open(path, 'r')
     keys = keyfile.read().split("\\n")
     keys = map(lambda w: w.strip().split(), keys)
     keys = filter(lambda w: len(w) == 3, keys)
-    keys = map(lambda w: {"hostname": w[0], "type": w[1], "key": w[2]})
+    keys = map(lambda w: {"hostname": w[0], "type": w[1], "key": w[2]}, keys)
     self._hostkeys = keys
 
   # makes hosts like [1.2.3.4]:5 to 1.2.3.4. Other formats remain unchanged
   def _xtrhost(self, hoststr):
-    if re.match("^\[.+\]:\\d+$", hoststr):
+    if re.match(r'^\[.+\]:\\d+$', hoststr):
       return re.split(r'\[|\]', hoststr)[1]
     else:
       return hoststr
 
   def scan(self):
-    if not self._unknown_macs:
+    if not self._pylanscan._unknown_macs:
       return []
 
     scan_result = []
     keyscan_results = []
-    for port in self._conf.ports:
+    for port in self._conf["scan_ports"]:
       cmd = ["ssh-keyscan", "-4", "-T", str(self._conf["timeout"]), "-p", str(port)]
-      cmd += map(w: w["ip"], self._unknown_macs)
+      cmd += map(lambda w: w["ip"], self._pylanscan._unknown_macs)
       keyscan_result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
       if keyscan_result.returncode not in [0, 1]:
         die ("ssh-keyscan command fails, exit code: %i" % scan_result.returncode, exit_code = scan_result.returncode)
       keyscan_result = keyscan_result.stdout.decode("utf-8")
       keyscan_result = keyscan_result.split("\n")
-      keyscan_result = filter(lambda w: w[0] != "#", keyscan_result)
+      keyscan_result = filter(lambda w: w and w[0] != "#", keyscan_result)
       keyscan_result = map(lambda w: w.split(), keyscan_result)
       keyscan_result = map(lambda w: {"ip": self._xtrhost(w[0]), "type": w[1], "key": w[2]}, keyscan_result)
       keyscan_results += keyscan_result
@@ -62,4 +62,4 @@ class sshkey_scanner:
     return scan_result
 
 def create(conf, pylanscan):
-  return mac_scanner(conf, pylanscan)
+  return sshkey_scanner(conf, pylanscan)

@@ -19,7 +19,7 @@ class mac_scanner:
     scan_result = map(lambda w: {"iface": w[2], "mac": w[4], "ip": w[0]}, scan_result)
     scan_result = filter(lambda w: valid_ipv4(w["ip"]), scan_result)
     unknown_macs = filter(lambda w: w["mac"] not in self._conf["macs"], scan_result)
-    unknown_macs = filter(lambda w: w["iface"] in self._pylonscan.config.iface_prio_order, unknown_macs)
+    unknown_macs = filter(lambda w: w["iface"] in self._pylanscan._config.iface_prio_order, unknown_macs)
     self._pylanscan.add_unknown_macs(unknown_macs)
     scan_result = filter(lambda w: w["mac"] in self._conf["macs"], scan_result)
     scan_result = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), scan_result)
