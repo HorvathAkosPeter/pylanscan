@@ -7,8 +7,19 @@ class sshkey_scanner:
   def __init__(self, conf, pylanscan):
     self._conf = conf
     self._pylanscan = pylanscan
+    self._read_hostkeys(conf.ssh_host_keys)
+
+  def _read_hostkeys(self, path):
+    keyfile = open(path, 'r')
+    keys = keyfile.read().split("\\n")
+    keys = map(lambda w: w.strip().split(), keys)
+    keys = filter(lambda w: len(w) == 3, keys)
+    keys = map(lambda w: {"hostname": w[0], "type": w[1], key: w[2]})
+    self._hostkeys = keys
 
   def scan(self):
+    for port in self._conf.ports:
+
     scan_result = subprocess.run(["ip", "neigh", "ls"], stdout=subprocess.PIPE)
     if scan_result.returncode != 0:
       die ("ip neigh ls command fails, exit code: %i" % scan_result.returncode, exit_code = scan_result.returncode)

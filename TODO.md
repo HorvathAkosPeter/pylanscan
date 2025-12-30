@@ -4,3 +4,5 @@
 * debug output to understand, which can found what
 * if there are contradicting results, report or alarm
 * yaml-based configuration
+* utilize nmap ping or tcp scan
+* ssh-keygen has a subnet scanning feature and seems working quite well
