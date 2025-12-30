@@ -3,7 +3,7 @@ import subprocess
 
 from lib import dict_update, valid_ipv4
 
-class mac_scanner:
+class sshkey_scanner:
   def __init__(self, conf, pylanscan):
     self._conf = conf
     self._pylanscan = pylanscan

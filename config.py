@@ -3,6 +3,7 @@ import os
 import avahi_scanner
 import mac_scanner
 import localif_scanner
+import sshkey_scanner
 import ddns_store
 
 avahi_scan = {
@@ -17,7 +18,7 @@ mac_scan = {
     "a6:c0:37:bf:d4:3e": "derpeter",
     "14:5f:94:de:84:5c": "diekati",
     "24:c6:13:0f:50:dd": "diekati2",
-    "1e:6c:d1:37:18:49": "e7_1",
+    # "1e:6c:d1:37:18:49": "e7_1", # randomizes
     "b0:5a:da:23:5b:40": "hp235b3f",
     "80:c1:6e:44:ca:32": "hpmaxx",
     "7c:e9:d3:82:3c:53": "hpmaxx",
@@ -32,6 +33,11 @@ localif_scan = {
   "scanner_type": localif_scanner
 }
 
+sshkey_scan = {
+  "scanner_type": sshkey_scanner
+  "ssh_known_hosts": "/etc/ssh/ssh_known_hosts"
+}
+
 ddns_stor = {
   "store_type": ddns_store,
   "srv_host": "127.0.0.1",
@@ -44,7 +50,7 @@ ddns_stor = {
 }
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
-scanners = [ avahi_scan, mac_scan, localif_scan ]
+scanners = [ avahi_scan, mac_scan, localif_scan, sshkey_scan ]
 #scanners = [ localif_scan ]
 stores = [ ddns_stor ]
 # hostname =  "well"

@@ -9,13 +9,17 @@ import config
 class pylanscan():
   def __init__(self, config):
     self._ts = ts_now()
+    self._unknown_macs = []
     self.scan_result = []
     if hasattr(config, "hostname"):
       self._hostname = config.hostname
     elif "HOSTNAME" in os.environ and os.environ["HOSTNAME"]:
       self._hostname = os.environ["HOSTNAME"]
     else:
-      die ("HOSTNAME unknown, need either hostname in configuration or HOSTNAME environment variable")
+      self._hostname = os.uname().nodename
+
+  def add_unknown_macs(self, mac_list):
+    self._unknown_macs += mac_list
 
   def scan(self):
     for scanner_conf in config.scanners:
