@@ -1,8 +1,9 @@
 #!/usr/bin/python3
+import importlib
 import os
 import sys
 
-from lib import ts_now, dict_update, uniq_functor, entry_compare, die
+from lib import ts_now, dict_update, uniq_functor, entry_compare, die, debug
 
 import config
 
@@ -24,10 +25,13 @@ class pylanscan():
 
   def scan(self):
     for scanner_conf in config.scanners:
-      scanner_lib = scanner_conf["scanner_type"]
+      debug (3, "--- Scan " + scanner_conf["scanner_type"] + ":")
+      scanner_lib = importlib.import_module(scanner_conf["scanner_type"])
       scanner = scanner_lib.create(scanner_conf, self)
       scan_result = scanner.scan()
       scan_result = map(lambda w: dict_update(w, {"scanner": scanner_lib.__name__}), scan_result)
+      #for i in scan_result:
+      #  debug(3, dict(sorted(i.items())))
       self.scan_result += scan_result
 
   def process(self):
@@ -42,7 +46,8 @@ class pylanscan():
 
   def store(self):
     for store_conf in config.stores:
-      store_lib = store_conf["store_type"]
+      debug (3, "--- Store " + store_conf["store_type"] + ":")
+      store_lib = importlib.import_module(store_conf["store_type"])
       store = store_lib.create(store_conf, self)
       store.store(self.scan_result)
 

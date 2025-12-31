@@ -2,9 +2,15 @@ import datetime
 import re
 import sys
 
+import config
+
 def die(msg, exit_code=-1):
   print (msg, file=sys.stderr)
   sys.exit(exit_code)
+
+def debug(level, thing):
+  if config.verbose >= level:
+    print (thing)
 
 def dict_update(the_dict, update_dict):
   ret = dict(the_dict)

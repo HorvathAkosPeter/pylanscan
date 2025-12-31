@@ -1,18 +1,12 @@
 import os
 
-import avahi_scanner
-import mac_scanner
-import localif_scanner
-import sshkey_scanner
-import ddns_store
-
 avahi_scan = {
-  "scanner_type": avahi_scanner,
+  "scanner_type": "avahi_scanner",
   "avahi_browse_flags": "-arpt" if "TERMUX_VERSION" in os.environ else "-arkpt"
 }
 
 mac_scan = {
-  "scanner_type": mac_scanner,
+  "scanner_type": "mac_scanner",
   "macs": {
     "0a:d9:da:78:e9:3d": "derpeter",
     "a6:c0:37:bf:d4:3e": "derpeter",
@@ -30,18 +24,22 @@ mac_scan = {
 }
 
 localif_scan = {
-  "scanner_type": localif_scanner
+  "scanner_type": "localif_scanner"
 }
 
 sshkey_scan = {
-  "scanner_type": sshkey_scanner,
+  "scanner_type": "sshkey_scanner",
   "ssh_known_hosts": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/ssh/ssh_known_hosts",
   "scan_ports": [22, 2222, 2223, 8022],
   "timeout": 5
 }
 
+#tlscert_scan = {
+#  "scanner_type": tlscert_scan,
+#}
+
 ddns_stor = {
-  "store_type": ddns_store,
+  "store_type": "ddns_store",
   "srv_host": "127.0.0.1",
   "srv_port": 9053,
   "key_path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/bind/ddns.key.conf",
@@ -52,7 +50,10 @@ ddns_stor = {
 }
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
+
+# tlscert_scanner is not ready yet!
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
 stores = [ ddns_stor ]
 # hostname =  "well"
+verbose = 3

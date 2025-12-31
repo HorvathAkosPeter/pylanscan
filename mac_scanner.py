@@ -1,7 +1,7 @@
 import re
 import subprocess
 
-from lib import dict_update, valid_ipv4
+from lib import dict_update, valid_ipv4, debug
 
 class mac_scanner:
   def __init__(self, conf, pylanscan):
@@ -17,10 +17,12 @@ class mac_scanner:
     scan_result = map(lambda w: w.split(), scan_result)
     scan_result = filter(lambda w: len(w)>=5, scan_result)
     scan_result = map(lambda w: {"iface": w[2], "mac": w[4], "ip": w[0]}, scan_result)
-    scan_result = filter(lambda w: valid_ipv4(w["ip"]), scan_result)
+    scan_result = list(filter(lambda w: valid_ipv4(w["ip"]), scan_result))
     unknown_macs = filter(lambda w: w["mac"] not in self._conf["macs"], scan_result)
     unknown_macs = filter(lambda w: w["iface"] in self._pylanscan._config.iface_prio_order, unknown_macs)
-    self._pylanscan.add_unknown_macs(unknown_macs)
+    self._pylanscan.add_unknown_macs(list(unknown_macs))
+    for i in scan_result:
+      debug(3, dict(sorted(i.items())))
     scan_result = filter(lambda w: w["mac"] in self._conf["macs"], scan_result)
     scan_result = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), scan_result)
     return scan_result
