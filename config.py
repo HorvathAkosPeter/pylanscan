@@ -13,7 +13,7 @@ mac_scan = {
     "14:5f:94:de:84:5c": "diekati",
     "24:c6:13:0f:50:dd": "diekati2",
     # "1e:6c:d1:37:18:49": "e7_1", # randomizes
-    "b0:5a:da:23:5b:40": "hp235b3f",
+    "b0:5a:da:23:5b:40": "hpoj",
     "80:c1:6e:44:ca:32": "hpmaxx",
     "7c:e9:d3:82:3c:53": "hpmaxx",
     "f8:5e:a0:06:fc:02": "katilaptop2",

@@ -6,6 +6,7 @@
 * env_store: environment variable files as store, like ~/.environ
 * hosts_store: /etc/hosts as store
 * lib: debug output to understand, which can found what
+* mac_scanner: config should use mac-host pair list from an external path
 * nmap_scanner: utilize nmap ping or tcp scan to discover hosts
 * pylanscan: if there are contradicting results, report or alarm
 * pylanscan: we might have some reporting or alarming for unknown macs/ips found
