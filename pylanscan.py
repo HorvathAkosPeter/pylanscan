@@ -30,8 +30,8 @@ class pylanscan():
       scanner = scanner_lib.create(scanner_conf, self)
       scan_result = scanner.scan()
       scan_result = map(lambda w: dict_update(w, {"scanner": scanner_lib.__name__}), scan_result)
-      #for i in scan_result:
-      #  debug(3, dict(sorted(i.items())))
+      for i in scan_result:
+        debug(3, dict(sorted(i.items())))
       self.scan_result += scan_result
 
   def process(self):

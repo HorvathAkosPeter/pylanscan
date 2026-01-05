@@ -51,9 +51,12 @@ ddns_stor = {
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
 
+if os.uname().nodename == "cp050w60457":
+  hostname = "ppyur"
+
 # tlscert_scanner is not ready yet!
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
 stores = [ ddns_stor ]
 # hostname =  "well"
-verbose = 3
+verbose = 4
