@@ -35,14 +35,13 @@ class pylanscan():
       self.scan_result += scan_result
 
   def process(self):
-    #[print (i) for i in self.scan_result]
-    #sys.exit(0)
     self.scan_result = filter(lambda w: w["iface"] in config.iface_prio_order, self.scan_result)
     self.scan_result = map(lambda w: dict_update(w, {"iface_prio": config.iface_prio_order.index(w["iface"])}), self.scan_result)
     self.scan_result = sorted(self.scan_result, key = lambda w: ",".join([str(w["iface_prio"]), w["ip"], w["hostname"]]) )
     self.scan_result = filter(uniq_functor(entry_compare), self.scan_result)
-    #[print (i) for i in self.scan_result]
-    #sys.exit(0)
+    if config.verbose >= 3:
+      debug (3, "--- Summarized result:")
+      [debug (3, i) for i in self.scan_result]
 
   def store(self):
     for store_conf in config.stores:
