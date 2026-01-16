@@ -26,7 +26,7 @@ class ddns_store():
     return results
 
   def add_record(self, zone, rec_name, rec_type, rec_value):
-    # print ("add_record(%s, %s, %s, %s)" % (zone, rec_name, rec_type, rec_value))
+    print ("add_record(%s, %s, %s, %s)" % (zone, rec_name, rec_type, rec_value))
     cur_vals = self.get_record(rec_name, rec_type)
     need_to_add = True
     if not zone in self._nsu:
