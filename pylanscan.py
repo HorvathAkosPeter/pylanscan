@@ -30,8 +30,10 @@ class pylanscan():
       scanner = scanner_lib.create(scanner_conf, self)
       scan_result = scanner.scan()
       scan_result = map(lambda w: dict_update(w, {"scanner": scanner_lib.__name__}), scan_result)
+      scan_result = list(scan_result)
       for i in scan_result:
         debug(3, dict(sorted(i.items())))
+      #debug (3, scan_result)
       self.scan_result += scan_result
 
   def process(self):
@@ -41,7 +43,8 @@ class pylanscan():
     self.scan_result = filter(uniq_functor(entry_compare), self.scan_result)
     if config.verbose >= 3:
       debug (3, "--- Summarized result:")
-      [debug (3, i) for i in self.scan_result]
+      debug (3, list(self.scan_result))
+    #  [debug (3, i) for i in self.scan_result]
 
   def store(self):
     for store_conf in config.stores:

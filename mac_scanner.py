@@ -25,7 +25,7 @@ class mac_scanner:
       debug(3, dict(sorted(i.items())))
     scan_result = filter(lambda w: w["mac"] in self._conf["macs"], scan_result)
     scan_result = map(lambda w: dict_update(w, {"hostname": self._conf["macs"][w["mac"]] }), scan_result)
-    return scan_result
+    return list(scan_result)
 
 def create(conf, pylanscan):
   return mac_scanner(conf, pylanscan)

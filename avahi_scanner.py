@@ -18,7 +18,7 @@ class avahi_scanner:
     scan_result = map(lambda w: w.split(";"), scan_result)
     scan_result = map(lambda w:{"iface": w[1], "fqdn": w[6], "ip": w[7]}, scan_result)
     scan_result = map(lambda w: dict_update(w, {"hostname": re.sub(r'[-\.].*$', '', w["fqdn"]) }), scan_result)
-    return scan_result
+    return list(scan_result)
 
 def create(conf, pylanscan):
   return avahi_scanner(conf, pylanscan)
