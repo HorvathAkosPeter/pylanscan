@@ -33,7 +33,7 @@ class pylanscan():
       scan_result = list(scan_result)
       for i in scan_result:
         debug(3, dict(sorted(i.items())))
-      #debug (3, scan_result)
+      # debug (3, scan_result)
       self.scan_result += scan_result
 
   def process(self):
@@ -41,6 +41,7 @@ class pylanscan():
     self.scan_result = map(lambda w: dict_update(w, {"iface_prio": config.iface_prio_order.index(w["iface"])}), self.scan_result)
     self.scan_result = sorted(self.scan_result, key = lambda w: ",".join([str(w["iface_prio"]), w["ip"], w["hostname"]]) )
     self.scan_result = filter(uniq_functor(entry_compare), self.scan_result)
+    self.scan_result = list(self.scan_result)
     if config.verbose >= 3:
       debug (3, "--- Summarized result:")
       debug (3, list(self.scan_result))

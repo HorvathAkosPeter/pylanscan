@@ -30,7 +30,7 @@ localif_scan = {
 sshkey_scan = {
   "scanner_type": "sshkey_scanner",
   "ssh_known_hosts": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/ssh/ssh_known_hosts",
-  "scan_ports": [22, 2222, 2223, 8022],
+  "scan_ports": [22, 2222, 8022],
   "timeout": 5
 }
 
@@ -58,5 +58,7 @@ if os.uname().nodename == "cp050w60457":
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
 stores = [ ddns_stor ]
+# stores = [ ddns_stor, etc_hosts, env_file ]
+# hosts store, environment store, dns zone scan
 # hostname =  "well"
 verbose = 4
