@@ -49,6 +49,16 @@ ddns_stor = {
   "default_refresh": 3600
 }
 
+etchosts_stor = {
+  "store_type": "etchosts_store",
+  "path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/hosts"
+}
+
+envsh_stor = {
+  "store_type": "envsh_store",
+  "path": os.environ["HOME"] + "/.environment"
+}
+
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
 
 if os.uname().nodename == "cp050w60457":
@@ -57,7 +67,7 @@ if os.uname().nodename == "cp050w60457":
 # tlscert_scanner is not ready yet!
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
-stores = [ ddns_stor ]
+stores = [ ddns_stor, etchosts_stor, envsh_stor ]
 # stores = [ ddns_stor, etc_hosts, env_file ]
 # hosts store, environment store, dns zone scan
 # hostname =  "well"
