@@ -67,7 +67,8 @@ if os.uname().nodename == "cp050w60457":
 # tlscert_scanner is not ready yet!
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
-stores = [ ddns_stor, etchosts_stor, envsh_stor ]
+stores = [ ddns_stor ]
+# stores = [ ddns_stor, etchosts_stor, envsh_stor ]
 # stores = [ ddns_stor, etc_hosts, env_file ]
 # hosts store, environment store, dns zone scan
 # hostname =  "well"
