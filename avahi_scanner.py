@@ -1,7 +1,7 @@
 import re
 import subprocess
 
-from lib import dict_update
+from lib import die, dict_update
 
 class avahi_scanner:
   def __init__(self, conf, pylanscan):
