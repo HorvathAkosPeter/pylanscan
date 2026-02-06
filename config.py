@@ -18,6 +18,9 @@ mac_scan = {
     "7c:e9:d3:82:3c:53": "hpmaxx",
     "f8:5e:a0:06:fc:02": "katilaptop2",
     "f0:c4:2f:08:61:a8": "matepad1",
+    "90:65:84:4b:ca:da": "ppyur",
+    "52:54:00:35:c9:33": "ppyur",
+    "52:54:00:c5:6e:82": "ppyur_win",
     "ce:0f:3a:da:f6:e4": "sony",
     "46:b3:02:66:fe:01": "tcl"
   }
