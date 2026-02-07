@@ -8,7 +8,7 @@ etchosts_markup_config = {
 
 class etchosts_store(markup_store):
   def __init__(self, conf, pylanscan):
-    super.__init__(self, conf, pylanscan, etchosts_markup_config)
+    super().__init__(conf, pylanscan, etchosts_markup_config)
 
 def create(conf, pylanscan):
   return etchosts_store(conf, pylanscan)

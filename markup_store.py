@@ -25,11 +25,14 @@ class markup_store():
     else:
       end = search_list(content, self._markup_config["end_line"], after=begin)
 
+    print ("begin: " + str(begin))
+    print ("end: " + str(end))
+
     if begin is False and end is False:
       return (content, [], [])
-    elif begin is True and end is False:
+    elif begin is not False and end is False:
       return (content[:begin], content[begin+1:], [])
-    elif begin is True and end is True:
+    elif begin is not False and end is not False:
       return (content[:begin], content[begin+1:end], content[end+1:])
     else:
       die ("unreachable")
@@ -41,7 +44,7 @@ class markup_store():
     new_all_lines = before + [self._markup_config["start_line"]] + lines + [self._markup_config["end_line"]] + after
     new_content = "\n".join(new_all_lines)
     bkp_path = self._conf["path"] + "~" + self._pylanscan._ts
-    if pathlib.Path(self._conf["path"]).is_file():
+    if self._conf["backup"] is True and pathlib.Path(self._conf["path"]).is_file():
       bkp_result = subprocess.run(["cp", "-vfa", self._conf["path"], bkp_path])
       if bkp_result.returncode != 0:
         die ("can not create backup file %s" % bkp_path)

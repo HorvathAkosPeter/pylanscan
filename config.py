@@ -41,6 +41,13 @@ sshkey_scan = {
 #  "scanner_type": tlscert_scan,
 #}
 
+ddns_scan = {
+  "scanner_type": "ddns_scanner",
+  "srv_host": "127.0.0.1",
+  "srv_port": 9053,
+  "fwd_zone": "dyn.hwen.de"
+}
+
 ddns_stor = {
   "store_type": "ddns_store",
   "srv_host": "127.0.0.1",
@@ -54,14 +61,16 @@ ddns_stor = {
 
 etchosts_stor = {
   "store_type": "etchosts_store",
-  "path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/hosts"
+  "path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/hosts",
+  "backup": True
 }
 
 envfile_stor = {
   "store_type": "envfile_store",
   #"path": os.environ["HOME"] + "/.environment"
   "path": "/tmp/testenv",
-  "exports": True
+  "exports": True,
+  "backup": True
 }
 
 iface_prio_order = [ "ap0", "wlan1", "wlan0", "virbr0" ]
@@ -70,10 +79,10 @@ if os.uname().nodename == "cp050w60457":
   hostname = "ppyur"
 
 # tlscert_scanner is not ready yet!
-scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
+scanners = [ ddns_scan, localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
 # stores = [ ddns_stor ]
-stores = [ ddns_stor, envfile_stor ]
+stores = [ ddns_stor, envfile_stor, etchosts_stor ]
 # hosts store, environment store, dns zone scan
 # hostname =  "well"
 verbose = 4

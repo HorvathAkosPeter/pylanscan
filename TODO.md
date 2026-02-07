@@ -1,11 +1,13 @@
 * config: yaml-based configuration
 * config: more complex structure: a local termux ddns on the phone/router, as first-level store, then merge it into a hosted net bind
 * ddns_scan: scan plugin as the AXFR query of a friendly DNS server (like bind in a termux)
+* ddns_store: should re-use the result of a previous ddns_scan
 * ddns_store: using some type of DNSSEC in the ddns store
 * lib: debug output to understand, which can found what
 * mac_scanner: config should use mac-host pair list from an external path
 * nmap_scanner: utilize nmap ping or tcp scan to discover hosts
 * pylanscan: if there are contradicting results, report or alarm
+* pylanscan: some scan results can have multiple or overlapping entries, some not. Handle both.
 * pylanscan: we might have some reporting or alarming for unknown macs/ips found
 * pylanscan: we would need some dependency handling - sshkey_scanner can only run after mac_scanner has already created a list of the unknown macs
 * sshkey_scanner: could also have a key list. Currently it can only use a host key format (as in /etc/ssh/ssh_known_hosts)

@@ -13,7 +13,7 @@ class envfile_store(markup_store):
     cfg = copy.copy(envfile_markup_config)
     if conf["exports"]:
       cfg["record_markup"] = "export " + cfg["record_markup"]
-    super().__init__(conf, pylanscan, envfile_markup_config)
+    super().__init__(conf, pylanscan, cfg)
 
 def create(conf, pylanscan):
   return envfile_store(conf, pylanscan)

@@ -33,6 +33,9 @@ class uniq_functor(object):
 def entry_compare(e1, e2):
   return e1["iface"] == e2["iface"] and e1["ip"] == e2["ip"] and e1["hostname"] == e2["hostname"]
 
+def entry_compare_hostname(e1, e2):
+  return e1["hostname"] == e2["hostname"]
+
 def ts_now():
   now = datetime.datetime.now(tz=datetime.timezone.utc)
   return now.strftime("%Y%m%d%H%M%S%f")
