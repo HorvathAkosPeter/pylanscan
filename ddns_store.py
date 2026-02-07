@@ -35,8 +35,8 @@ class ddns_store():
       if rec_value not in zone[rec_idx]:
         zone[rec_idx].append(rec_value)
     self._zones[zone_name] = zone
-    print ("zone %s: " % zone)
-    print (zone)
+    # print ("zone %s: " % zone)
+    # print (zone)
 
   def get_record(self, zone, rec_name, rec_type):
     print ("get_record(%s, %s, %s)" % (zone, rec_name, rec_type))

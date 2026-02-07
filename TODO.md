@@ -2,8 +2,8 @@
 * config: more complex structure: a local termux ddns on the phone/router, as first-level store, then merge it into a hosted net bind
 * ddns_scan: scan plugin as the AXFR query of a friendly DNS server (like bind in a termux)
 * ddns_store: using some type of DNSSEC in the ddns store
-* env_store: environment variable files as store, like ~/.environ
-* hosts_store: /etc/hosts as store
+* envfile_store: environment variable files as store, like ~/.environ
+* etchosts_store: /etc/hosts as store
 * lib: debug output to understand, which can found what
 * mac_scanner: config should use mac-host pair list from an external path
 * nmap_scanner: utilize nmap ping or tcp scan to discover hosts

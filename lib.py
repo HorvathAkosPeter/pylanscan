@@ -42,3 +42,13 @@ def valid_ipv4(str_ip):
 
 def ip2rev(ip):
   return ".".join(ip.split(".")[::-1])+".in-addr.arpa"
+
+def search_list(lst, itm, **kwargs):
+  if "after" in kwargs:
+    after = kwargs["after"]
+  else:
+    after = -1
+  try:
+    return lst[after+1:].index(itm) + after + 1
+  except ValueError:
+    return False
