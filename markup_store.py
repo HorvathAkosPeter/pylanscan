@@ -1,10 +1,3 @@
-markup_config = {
-  "start_line": "# pylanscan section start",
-  "end_line": "# pylanscan section end",
-  "record_markup": "%(ip)s %(hostname)s",
-  "inverse_markup": r'?^P<ip>[^ ]+ ?P<hostname>$'
-}
-
 class markup_store():
   def __init__(self, conf, pylanscan, markup_config):
     self._conf = conf
