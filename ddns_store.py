@@ -8,26 +8,52 @@ class ddns_store():
     self._conf = conf
     self._nsu = dict()
     self._pylanscan = pylanscan
+    self._zones = dict()
 
-  def get_record(self, rec_name, rec_type):
-    host_result = subprocess.run(["host", "-v", "-T", "-4", "-p", str(self._conf["srv_port"]), "-t",
-                                rec_type, rec_name, self._conf["srv_host"]],
-                            stdout=subprocess.PIPE)
+  def get_zone(self, zone_name):
+    if zone_name in self._zones:
+      return
+    cmd = ["host", "-4", "-T", "-p", str(self._conf["srv_port"]), "-v", "-t", "AXFR", zone_name + ".", self._conf["srv_host"]]
+    print (" ".join(cmd))
+    host_result = subprocess.run(cmd, stdout=subprocess.PIPE)
     if host_result.returncode not in [0, 1]:
       die ("host command fails, exit code: %i" % host_result.returncode, exit_code = host_result.returncode)
     host_result = host_result.stdout.decode("utf-8").split("\n")
     host_result = map(lambda w: w.split(), host_result)
-    results = []
+    # print (list(host_result))
+    zone = dict()
     for i in host_result:
-      # print ("i: " + i.__repr__())
-      if len(i) >= 5 and i[0] == rec_name + "." and i[3] == rec_type:
-        results.append(i[4])
-    # print (rec_name, rec_type, results)
-    return results
+      # print (i)
+      if len(i) < 5 or i[0][0] == ";" or i[2] != "IN" or i[3] not in ["TXT", "PTR", "A"]:
+        continue
+      rec_name = i[0]
+      rec_type = i[3]
+      rec_value = i[4]
+      rec_idx = rec_name + "|" + rec_type
+      if rec_idx not in zone:
+        zone[rec_idx] = []
+      if rec_value not in zone[rec_idx]:
+        zone[rec_idx].append(rec_value)
+    self._zones[zone_name] = zone
+    print ("zone %s: " % zone)
+    print (zone)
+
+  def get_record(self, zone, rec_name, rec_type):
+    print ("get_record(%s, %s, %s)" % (zone, rec_name, rec_type))
+    if rec_name[-1] != ".":
+      rec_name = rec_name + "."
+    self.get_zone(zone)
+    rec_idx = rec_name + "|" + rec_type
+    if rec_idx not in self._zones[zone]:
+      result = []
+    else:
+      result = self._zones[zone][rec_idx]
+    print (result)
+    return result
 
   def add_record(self, zone, rec_name, rec_type, rec_value):
     print ("add_record(%s, %s, %s, %s)" % (zone, rec_name, rec_type, rec_value))
-    cur_vals = self.get_record(rec_name, rec_type)
+    cur_vals = self.get_record(zone, rec_name, rec_type)
     need_to_add = True
     if not zone in self._nsu:
       self._nsu[zone] = []
@@ -39,7 +65,7 @@ class ddns_store():
         self._nsu[zone].append("update delete %s. %i IN %s %s" % (rec_name, self._conf["default_refresh"], rec_type, cur_val))
     if need_to_add:
       self._nsu[zone].append("update add %s. %i IN %s %s" % (rec_name, self._conf["default_refresh"], rec_type, rec_value))
-    if rec_type != "TXT" and (need_to_add or len(self.get_record(rec_name, "TXT")) > 1):
+    if rec_type != "TXT" and (need_to_add or len(self.get_record(zone, rec_name, "TXT")) > 1):
       self.add_record(zone, rec_name, "TXT", "\"" + self._pylanscan._ts + "\"")
 
   def store(self, scan_result):
