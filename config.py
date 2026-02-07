@@ -59,7 +59,8 @@ etchosts_stor = {
 
 envfile_stor = {
   "store_type": "envfile_store",
-  "path": os.environ["HOME"] + "/.environment"
+  #"path": os.environ["HOME"] + "/.environment"
+  "path": "/tmp/testenv",
   "exports": True
 }
 
@@ -72,7 +73,7 @@ if os.uname().nodename == "cp050w60457":
 scanners = [ localif_scan, mac_scan, avahi_scan, sshkey_scan ]
 # scanners = [ mac_scan, sshkey_scan ]
 # stores = [ ddns_stor ]
-stores = [ ddns_stor, etchosts_stor, envfile_stor ]
+stores = [ ddns_stor, envfile_stor ]
 # hosts store, environment store, dns zone scan
 # hostname =  "well"
 verbose = 4

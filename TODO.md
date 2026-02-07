@@ -2,8 +2,6 @@
 * config: more complex structure: a local termux ddns on the phone/router, as first-level store, then merge it into a hosted net bind
 * ddns_scan: scan plugin as the AXFR query of a friendly DNS server (like bind in a termux)
 * ddns_store: using some type of DNSSEC in the ddns store
-* envfile_store: environment variable files as store, like ~/.environ
-* etchosts_store: /etc/hosts as store
 * lib: debug output to understand, which can found what
 * mac_scanner: config should use mac-host pair list from an external path
 * nmap_scanner: utilize nmap ping or tcp scan to discover hosts
@@ -18,3 +16,5 @@
 * ddns_store: bind9 does not want to give AXFR queries for ANY record type. (Fun: -t AXFR but without "-l" works)
     (workaround: host -t AXFR (without "-l") does exactly what we wanted)
 * ddns_store: axfr scan as source
+* envfile_store: environment variable files as store, like ~/.environ
+* etchosts_store: /etc/hosts as store

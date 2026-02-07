@@ -1,4 +1,4 @@
-mport subprocess
+import subprocess
 import sys
 
 from lib import ip2rev, dict_update, die
