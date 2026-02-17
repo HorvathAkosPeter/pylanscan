@@ -62,7 +62,8 @@ ddns_stor = {
 etchosts_stor = {
   "store_type": "etchosts_store",
   "path": (os.environ["TERMUX__PREFIX"] if "TERMUX__PREFIX" in os.environ else "") + "/etc/hosts",
-  "backup": True
+  "backup": True,
+  "domain": "dyn.hwen.de"
 }
 
 envfile_stor = {

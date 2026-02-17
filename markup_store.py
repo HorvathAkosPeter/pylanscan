@@ -43,7 +43,7 @@ class markup_store():
   def write_file(self, before, lines, after):
     new_all_lines = before + [self._markup_config["start_line"]] + lines + [self._markup_config["end_line"]] + after
     new_content = "\n".join(new_all_lines)
-    bkp_path = self._conf["path"] + "~" + self._pylanscan._ts
+    bkp_path = self._conf["path"] + "." + self._pylanscan._ts + "~"
     if self._conf["backup"] is True and pathlib.Path(self._conf["path"]).is_file():
       bkp_result = subprocess.run(["cp", "-vfa", self._conf["path"], bkp_path])
       if bkp_result.returncode != 0:

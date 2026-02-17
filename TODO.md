@@ -20,3 +20,5 @@
 * ddns_store: axfr scan as source
 * envfile_store: environment variable files as store, like ~/.environ
 * etchosts_store: /etc/hosts as store
+* etchosts_store: fqdn support
+* etchosts_store: backup ends with tilde
